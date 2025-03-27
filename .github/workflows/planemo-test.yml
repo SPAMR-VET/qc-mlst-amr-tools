@@ -24,13 +24,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install wheel setuptools
         pip install click==8.1.0 pyyaml
+        pip install pathvalidate
         pip install gxformat2
         pip install bioblend galaxy-tool-util ephemeris
         pip install planemo
 
     - name: Verify installation
       run: |
-        pip list | grep -E 'click|planemo|yaml|gxformat2|bioblend|ephemeris'
+        pip list | grep -E 'click|planemo|yaml|gxformat2|bioblend|ephemeris|pathvalidate'
         planemo --version
 
     - name: Verify directory structure
