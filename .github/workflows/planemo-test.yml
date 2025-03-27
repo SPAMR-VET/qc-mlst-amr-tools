@@ -48,7 +48,9 @@ jobs:
           --conda_dependency_resolution \
           --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
-          --verbose \
+          --summary compact \
+          --test_output fastp_bracken_output.html \
+          --test_output_json fastp_bracken_output.json \
           fastp-bracken/quality_script_fastp_bracken.xml
       continue-on-error: true
 
@@ -59,7 +61,9 @@ jobs:
           --conda_dependency_resolution \
           --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
-          --verbose \
+          --summary compact \
+          --test_output mlst_amr_output.html \
+          --test_output_json mlst_amr_output.json \
           mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
       continue-on-error: true
 
@@ -70,7 +74,9 @@ jobs:
           --conda_dependency_resolution \
           --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
-          --verbose \
+          --summary compact \
+          --test_output quast_output.html \
+          --test_output_json quast_output.json \
           quast/quast_get_fasta.xml
       continue-on-error: true
 
@@ -80,11 +86,7 @@ jobs:
         echo "Current directory contents:"
         ls -la
         echo "Tool test output files:"
-        find . -name "tool_test_output.html" -o -name "*.json"
-        if [ -f "tool_test_output.html" ]; then
-          echo "Tool test summary:"
-          grep -A 20 "Summary" tool_test_output.html || true
-        fi
+        find . -name "*_output.html" -o -name "*_output.json"
 
     - name: Upload test reports
       if: always()
@@ -92,6 +94,5 @@ jobs:
       with:
         name: planemo-test-reports
         path: |
-          tool_test_output.html
-          ./**/*.html
-          ./**/*.json
+          *_output.html
+          *_output.json
