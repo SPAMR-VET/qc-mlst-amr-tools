@@ -1,0 +1,70 @@
+<tool id="mlst_amr_staramr"
+      name="MLST, AMRfinder, and STARamr Analysis"
+      version="0.1.0+galaxy0"
+      profile="21.05">
+
+    <description>Extracts MLST, AMRfinder Plus, and STARamr results from JSON input.</description>
+
+    <requirements>
+        <requirement type="package" version="3.12">python</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code">
+        <![CDATA[
+        python '$__tool_directory__/mlst_amrfinder_staramr.py' '$json_input'
+        ]]>
+    </command>
+
+    <inputs>
+        <param name="json_input" type="data" format="json" label="Input JSON File"
+               help="Provide a JSON file containing MLST, AMRfinder Plus, and STARamr results."/>
+    </inputs>
+
+    <outputs>
+        <data name="mlst_csv" format="csv" from_work_dir="mlst.csv"
+              label="MLST Summary on ${on_string}"/>
+        <data name="amr_csv" format="csv" from_work_dir="AMRfinderPlus_output.csv"
+              label="AMRfinder Plus Results on ${on_string}"/>
+        <data name="staramr_csv" format="csv" from_work_dir="STARamr_output.csv"
+              label="STARamr Results on ${on_string}"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="json_input" value="example_input.json"/>
+            <output name="mlst_csv" file="expected_mlst.csv" compare="diff"/>
+            <output name="amr_csv" file="expected_amr.csv" compare="diff"/>
+            <output name="staramr_csv" file="expected_staramr.csv" compare="diff"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+MLST, AMRfinder, and STARamr Analysis
+=====================================
+
+This tool extracts MLST, AMRfinder Plus, and STARamr results from JSON input and converts them into CSV format.
+
+Usage Instructions
+------------------
+1. Provide a **JSON file** containing **MLST, AMRfinder Plus, and STARamr** results.
+2. The tool will process the data and generate:
+   - `mlst.csv`: MLST typing results.
+   - `AMRfinderPlus_output.csv`: Results from **AMRfinder Plus**.
+   - `STARamr_output.csv`: Results from **STARamr**.
+
+Outputs
+-------
+- **MLST CSV File:** Contains MLST typing information, including sequence type and scheme.
+- **AMRfinder Plus CSV File:** Lists detected antimicrobial resistance genes.
+- **STARamr CSV File:** Includes resistance profiles and sequence typing.
+
+References
+----------
+- `MLST <https://pubmlst.org/>`_ - Multi-locus sequence typing database.
+- `AMRfinder Plus <https://www.ncbi.nlm.nih.gov/pathogens/antimicrobial-resistance/AMRFinder/>`_ - Antimicrobial resistance gene detection.
+- `STARamr <https://github.com/phac-nml/staramr>`_ - Salmonella sequence typing and resistance analysis.
+
+For questions or issues, please contact the tool maintainers.
+    ]]></help>
+
+</tool>

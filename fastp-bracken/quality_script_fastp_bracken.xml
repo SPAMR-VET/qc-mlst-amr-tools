@@ -1,0 +1,43 @@
+<tool id="quality_script_fastp_bracken"
+      name="Quality Control FastP Bracken"
+      version="0.1.0+galaxy0"
+      profile="21.05">
+
+    <description>Quality control using FastP and Bracken</description>
+
+    <requirements>
+        <requirement type="package" version="3.12">python</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code">
+        <![CDATA[
+        python '$__tool_directory__/extract_software_data.py' '$json_input'
+        ]]>
+    </command>
+
+    <inputs>
+        <param name="json_input" type="data" format="json" label="Input JSON Data"/>
+    </inputs>
+
+    <outputs>
+        <data name="fastp_output" format="csv" from_work_dir="fastp_output.csv" label="FastP Summary Report on ${on_string}"/>
+        <data name="bracken_output" format="csv" from_work_dir="bracken_output.csv" label="Bracken Summary Report on ${on_string}"/>
+    </outputs>
+
+    <help><![CDATA[
+This tool processes sequencing data with FastP for quality control and then uses Bracken for classification or abundance estimation.
+
+### **Usage Instructions**
+1. Provide an input JSON file containing the results from FastP and Bracken analyses
+2. The tool will extract relevant data and generate two CSV files:
+   - FastP output with quality metrics
+   - Bracken output with taxonomic classification including contamination assessment
+
+### **References**
+- [FastP](https://github.com/OpenGene/fastp) - A tool for fast and efficient quality control.
+- [Bracken](https://github.com/jenniferlu717/Bracken) - A tool for accurate species abundance estimation.
+
+For support, please contact the tool maintainers.
+    ]]></help>
+
+</tool>

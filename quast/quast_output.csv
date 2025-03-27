@@ -1,0 +1,2 @@
+Assembly,contigs_(>=_0_bp),contigs_(>=_1000_bp),Total_length_(>=_0_bp),Total_length_(>=_1000_bp),contigs,Largest_contig,Total_length,GC,N50,Filter_N50,N90,auN,L50,L90,total_reads,left,right,Mapped,Properly_paired,Avg._coverage_depth,Coverage_>=_1x,N's_per_100_kbp
+TestAssembly1,10,8,5000000,4800000,12,300000,5000000,50.0,25000,pass,10000,20000,5,10,1000000,500000,500000,950000,900000,30,99.9,5

@@ -1,0 +1,51 @@
+[
+    {
+        "analysis_software_name": "mlst",
+        "results": [
+            {
+                "name": "mlst_file",
+                "content": [
+                    {
+                        "Isolate ID": "Iso1",
+                        "Scheme": "SchemeA",
+                        "Sequence Type": "ST1",
+                        "Locus": ["locus1", "locus2", "locus3"]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "analysis_software_name": "AMRfinderPlus",
+        "results": [
+            {
+                "content": [
+                    {
+                        "Gene": "blaTEM",
+                        "Identity": "99.5",
+                        "Coverage": "100"
+                    },
+                    {
+                        "Gene": "mecA",
+                        "Identity": "98.0",
+                        "Coverage": "95"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "analysis_software_name": "STARamr",
+        "results": [
+            {
+                "content": [
+                    {
+                        "Profile": "Resistant",
+                        "SequenceType": "ST8",
+                        "OtherMetric": "Value"
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,2 @@
+summary_before_filtering_total_reads,summary_before_filtering_q20_rate,summary_after_filtering_total_reads,summary_after_filtering_q20_rate,filtering_result_passed_filter_reads,duplication_rate,insert_size_peak
+100000,0.95,95000,0.96,95000,0.1,300

@@ -1,0 +1,45 @@
+[
+    {
+        "analysis_software_name": "fastp",
+        "results": [
+            {
+                "content": [
+                    {
+                        "summary": {
+                            "before_filtering": {
+                                "total_reads": 100000,
+                                "q20_rate": 0.95
+                            },
+                            "after_filtering": {
+                                "total_reads": 95000,
+                                "q20_rate": 0.96
+                            }
+                        },
+                        "filtering_result": {
+                            "passed_filter_reads": 95000
+                        },
+                        "duplication_rate": 0.1,
+                        "insert_size_peak": 300
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "analysis_software_name": "bracken",
+        "results": [
+            {
+                "content": [
+                    {
+                        "taxon": "Escherichia coli",
+                        "fraction_total_reads": 0.75
+                    },
+                    {
+                        "taxon": "Streptococcus suis",
+                        "fraction_total_reads": 0.4
+                    }
+                ]
+            }
+        ]
+    }
+]

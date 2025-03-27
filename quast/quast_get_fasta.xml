@@ -1,0 +1,67 @@
+<tool id="quast_get_fasta"
+      name="QUAST Analysis and FASTA Generator"
+      version="0.1.0+galaxy0"
+      profile="21.05">
+
+    <description>Extracts QUAST metrics and generates FASTA files from JSON input.</description>
+
+    <requirements>
+        <requirement type="package" version="3.12">python</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code">
+        <![CDATA[
+        python '$__tool_directory__/quast_get_fasta.py' '$json_input'
+        ]]>
+    </command>
+
+    <inputs>
+        <param name="json_input" type="data" format="json" label="Input JSON File"
+               help="Provide a JSON file containing QUAST and Shovill results."/>
+    </inputs>
+
+    <outputs>
+        <data name="csv_output" format="csv" from_work_dir="quast_output.csv"
+              label="QUAST Summary on ${on_string}"/>
+        <data name="fasta_output" format="fasta" from_work_dir="shovill_contigs.fasta"
+              label="Shovill Contigs on ${on_string}"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="json_input" value="example_input.json"/>
+            <output name="csv_output" file="expected_output.csv" compare="diff"/>
+            <output name="fasta_output" file="expected_output.fasta" compare="diff"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+QUAST Analysis and FASTA Generator
+==================================
+
+This tool extracts key statistics from **QUAST** and generates a **FASTA** file containing assembled contigs from **Shovill**.
+
+Usage Instructions
+------------------
+1. Upload or provide a **JSON file** containing **QUAST** and **Shovill** results.
+2. The tool will:
+   - Extract **assembly metrics** from QUAST and save them as a CSV.
+   - Convert **contigs from Shovill** into a FASTA file.
+3. The outputs will be:
+   - `quast_output.csv` (QUAST summary metrics)
+   - `shovill_contigs.fasta` (FASTA file with contigs)
+
+Outputs
+-------
+- **CSV File:** Contains QUAST summary metrics such as `N50`, `GC content`, `total length`, `L50`, and other key assembly statistics.
+- **FASTA File:** Extracts contigs from **Shovill**, formatting them properly for downstream analysis.
+
+References
+----------
+- `QUAST <http://bioinf.spbau.ru/quast>`_ - Quality assessment tool for genome assemblies.
+- `Shovill <https://github.com/tseemann/shovill>`_ - A tool for rapid bacterial genome assembly using SPAdes.
+
+For questions or issues, please contact the tool maintainers.
+    ]]></help>
+
+</tool>

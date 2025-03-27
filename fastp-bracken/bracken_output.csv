@@ -1,0 +1,3 @@
+taxon,fraction_total_reads,contamination
+Escherichia coli,0.75,pass
+Streptococcus suis,0.4,fail

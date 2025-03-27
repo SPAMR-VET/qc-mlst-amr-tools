@@ -1,0 +1,56 @@
+[
+    {
+        "analysis_software_name": "quast",
+        "results": [
+            {
+                "content": [
+                    {
+                        "Assembly": "TestAssembly1",
+                        "contigs_(>=_0_bp)": "10",
+                        "contigs_(>=_1000_bp)": "8",
+                        "Total_length_(>=_0_bp)": "5000000",
+                        "Total_length_(>=_1000_bp)": "4800000",
+                        "contigs": "12",
+                        "Largest_contig": "300000",
+                        "Total_length": "5000000",
+                        "GC": "50.0",
+                        "N50": "25000",
+                        "N90": "10000",
+                        "auN": "20000",
+                        "L50": "5",
+                        "L90": "10",
+                        "total_reads": "1000000",
+                        "left": "500000",
+                        "right": "500000",
+                        "Mapped": "950000",
+                        "Properly_paired": "900000",
+                        "Avg._coverage_depth": "30",
+                        "Coverage_>=_1x": "99.9",
+                        "N's_per_100_kbp": "5"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "analysis_software_name": "shovill",
+        "results": [
+            {
+                "content": [
+                    {
+                        "name": "contig1",
+                        "length": "1000",
+                        "coverage": "30",
+                        "sequence": "ATGCATGCATGC"
+                    },
+                    {
+                        "name": "contig2",
+                        "length": "2000",
+                        "coverage": "25",
+                        "sequence": "TGCATGCATGCA"
+                    }
+                ]
+            }
+        ]
+    }
+]
