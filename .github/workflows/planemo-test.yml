@@ -14,24 +14,66 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Python
+    - name: Set up Python 3.10
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
+        cache: 'pip'  # Enable dependency caching
 
-    - name: Install Planemo
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install planemo
+        # Uncomment if your tools require these:
+        # pip install biopython pandas
 
-    - name: Test FastP-Bracken tool
+    - name: Verify directory structure
       run: |
-        planemo test fastp-bracken/quality_script_fastp_bracken.xml --no_cleanup
+        echo "Repository contents:"
+        ls -lR
+        echo "Checking tool directories:"
+        [ -d fastp-bracken ] || exit 1
+        [ -d mlst-amrfinder-staramr ] || exit 1
+        [ -d quast ] || exit 1
 
-    - name: Test MLST-AMRFinder-StarAMR tool
+    - name: Lint tools
       run: |
-        planemo test mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml --no_cleanup
+        planemo lint fastp-bracken/quality_script_fastp_bracken.xml
+        planemo lint mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
+        planemo lint quast/quast_get_fasta.xml
 
-    - name: Test QUAST tool
+    - name: Run FastP-Bracken tests
       run: |
-        planemo test quast/quast_get_fasta.xml --no_cleanup
+        planemo test \
+          --galaxy_python_version 3.10 \
+          --no_container \
+          --retries 1 \
+          --test_output_all \
+          fastp-bracken/quality_script_fastp_bracken.xml
+
+    - name: Run MLST-AMRFinder-StarAMR tests
+      run: |
+        planemo test \
+          --galaxy_python_version 3.10 \
+          --no_container \
+          --retries 1 \
+          --test_output_all \
+          mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
+
+    - name: Run QUAST tests
+      run: |
+        planemo test \
+          --galaxy_python_version 3.10 \
+          --no_container \
+          --retries 1 \
+          --test_output_all \
+          quast/quast_get_fasta.xml
+
+    - name: Upload test reports
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: planemo-test-reports
+        path: |
+          tool_test_output.html
+          */tool_test_output.json
