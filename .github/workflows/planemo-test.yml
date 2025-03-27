@@ -19,17 +19,15 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Install dependencies
+    - name: Install Planemo and dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install wheel setuptools
-        # Install all required dependencies for Planemo
-        pip install click==8.1.0 pyyaml==6.0 jinja2 bioblend ephemeris galaxy-tool-util
+        pip install click==8.1.0
         pip install planemo
 
     - name: Verify installation
       run: |
-        pip list | grep -E 'click|planemo|yaml'
+        pip list
         planemo --version
 
     - name: Verify directory structure
