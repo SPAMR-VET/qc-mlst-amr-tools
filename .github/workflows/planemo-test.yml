@@ -11,14 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    # Step 1: Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # Step 2: Set up Python 3.10
     - name: Set up Python 3.10
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
+    # Step 3: Install dependencies
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -27,11 +30,13 @@ jobs:
         pip install bioblend galaxy-tool-util ephemeris
         pip install planemo
 
+    # Step 4: Verify installation of dependencies and Planemo version
     - name: Verify installation
       run: |
         pip list | grep -E 'click|planemo|yaml|gxformat2|bioblend|ephemeris|pathvalidate'
         planemo --version
 
+    # Step 5: Verify directory structure and ensure required directories exist
     - name: Verify directory structure
       run: |
         echo "Repository contents:"
@@ -41,6 +46,7 @@ jobs:
         [ -d mlst-amrfinder-staramr ] || { echo "mlst-amrfinder-staramr directory not found"; exit 1; }
         [ -d quast ] || { echo "quast directory not found"; exit 1; }
 
+    # Step 6: Test FastP-Bracken tool using Planemo
     - name: Test FastP-Bracken tool
       run: |
         planemo test \
@@ -54,6 +60,7 @@ jobs:
           fastp-bracken/quality_script_fastp_bracken.xml
       continue-on-error: true
 
+    # Step 7: Test MLST-AMRFinder-StarAMR tool using Planemo
     - name: Test MLST-AMRFinder-StarAMR tool
       run: |
         planemo test \
@@ -67,6 +74,7 @@ jobs:
           mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
       continue-on-error: true
 
+    # Step 8: Test QUAST tool using Planemo
     - name: Test QUAST tool
       run: |
         planemo test \
@@ -80,6 +88,7 @@ jobs:
           quast/quast_get_fasta.xml
       continue-on-error: true
 
+    # Step 9: List output files for debugging purposes
     - name: List output files
       if: always()
       run: |
@@ -88,6 +97,7 @@ jobs:
         echo "Tool test output files:"
         find . -name "*_output.html" -o -name "*_output.json"
 
+    # Step 10: Upload test reports as artifacts for review
     - name: Upload test reports
       if: always()
       uses: actions/upload-artifact@v4
@@ -96,3 +106,4 @@ jobs:
         path: |
           *_output.html
           *_output.json
+
