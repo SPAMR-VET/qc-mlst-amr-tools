@@ -9,7 +9,14 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        tool: [
+          "fastp-bracken/quality_script_fastp_bracken.xml",
+          "mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml",
+          "quast/quast_get_fasta.xml"
+        ]
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -18,62 +25,37 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-        cache: 'pip'  # Enable dependency caching
+        cache: 'pip'
 
-    - name: Install dependencies
+    - name: Install Planemo
       run: |
         python -m pip install --upgrade pip
         pip install planemo
-        # Uncomment if your tools require these:
-        # pip install biopython pandas
 
-    - name: Verify directory structure
+    - name: Verify tool XML exists
       run: |
-        echo "Repository contents:"
-        ls -lR
-        echo "Checking tool directories:"
-        [ -d fastp-bracken ] || exit 1
-        [ -d mlst-amrfinder-staramr ] || exit 1
-        [ -d quast ] || exit 1
+        if [ ! -f "${{ matrix.tool }}" ]; then
+          echo "::error::Tool file ${{ matrix.tool }} not found!"
+          exit 1
+        fi
 
-    - name: Lint tools
-      run: |
-        planemo lint fastp-bracken/quality_script_fastp_bracken.xml
-        planemo lint mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
-        planemo lint quast/quast_get_fasta.xml
-
-    - name: Run FastP-Bracken tests
+    - name: Run Planemo tests
       run: |
         planemo test \
           --galaxy_python_version 3.10 \
-          --no_container \
+          --conda_install \
+          --conda_ensure_channels conda-forge,bioconda,defaults \
           --retries 1 \
           --test_output_all \
-          fastp-bracken/quality_script_fastp_bracken.xml
-
-    - name: Run MLST-AMRFinder-StarAMR tests
-      run: |
-        planemo test \
-          --galaxy_python_version 3.10 \
-          --no_container \
-          --retries 1 \
-          --test_output_all \
-          mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
-
-    - name: Run QUAST tests
-      run: |
-        planemo test \
-          --galaxy_python_version 3.10 \
-          --no_container \
-          --retries 1 \
-          --test_output_all \
-          quast/quast_get_fasta.xml
+          --no_cache_galaxy \
+          --job_config_file job_conf.yml \
+          ${{ matrix.tool }}
 
     - name: Upload test reports
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: planemo-test-reports
+        name: planemo-test-reports-${{ matrix.tool }}
         path: |
           tool_test_output.html
           */tool_test_output.json
