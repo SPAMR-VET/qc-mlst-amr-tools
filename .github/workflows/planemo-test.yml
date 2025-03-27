@@ -23,9 +23,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install wheel setuptools
-        pip install click==8.1.0 pyyaml
-        pip install pathvalidate
-        pip install gxformat2
+        pip install click==8.1.0 pyyaml pathvalidate gxformat2
         pip install bioblend galaxy-tool-util ephemeris
         pip install planemo
 
@@ -47,8 +45,10 @@ jobs:
       run: |
         planemo test \
           --galaxy_python_version 3.10 \
+          --conda_dependency_resolution \
           --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
+          --verbose \
           fastp-bracken/quality_script_fastp_bracken.xml
       continue-on-error: true
 
@@ -56,8 +56,10 @@ jobs:
       run: |
         planemo test \
           --galaxy_python_version 3.10 \
+          --conda_dependency_resolution \
           --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
+          --verbose \
           mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
       continue-on-error: true
 
@@ -65,8 +67,10 @@ jobs:
       run: |
         planemo test \
           --galaxy_python_version 3.10 \
+          --conda_dependency_resolution \
           --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
+          --verbose \
           quast/quast_get_fasta.xml
       continue-on-error: true
 
@@ -77,6 +81,10 @@ jobs:
         ls -la
         echo "Tool test output files:"
         find . -name "tool_test_output.html" -o -name "*.json"
+        if [ -f "tool_test_output.html" ]; then
+          echo "Tool test summary:"
+          grep -A 20 "Summary" tool_test_output.html || true
+        fi
 
     - name: Upload test reports
       if: always()
@@ -84,5 +92,6 @@ jobs:
       with:
         name: planemo-test-reports
         path: |
+          tool_test_output.html
           ./**/*.html
           ./**/*.json
