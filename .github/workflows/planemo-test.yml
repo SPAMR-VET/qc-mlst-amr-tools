@@ -44,11 +44,11 @@ jobs:
     # Create the missing test input file for tools that expect it
     - name: Create missing test input for MLST-AMRFinder-StarAMR
       run: |
-        echo "{}" > mlst-amrfinder-staramr/example_input.json
+        echo "{}" > mlst-amrfinder-staramr/input.json
 
     - name: Create missing test input for QUAST
       run: |
-        echo "{}" > quast/example_input.json
+        echo "{}" > quast/input.json
 
     - name: Test FastP-Bracken tool
       run: |
@@ -58,7 +58,6 @@ jobs:
           --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
           --summary compact \
-          --test_output fastp_bracken_output.html \
           --test_output_json fastp_bracken_output.json \
           fastp-bracken/quality_script_fastp_bracken.xml
       continue-on-error: true
@@ -71,7 +70,6 @@ jobs:
           --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
           --summary compact \
-          --test_output mlst_amr_output.html \
           --test_output_json mlst_amr_output.json \
           mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
       continue-on-error: true
@@ -84,7 +82,6 @@ jobs:
           --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
           --summary compact \
-          --test_output quast_output.html \
           --test_output_json quast_output.json \
           quast/quast_get_fasta.xml
       continue-on-error: true
