@@ -47,7 +47,7 @@ jobs:
       run: |
         planemo test \
           --galaxy_python_version 3.10 \
-          --conda_install \
+          --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
           fastp-bracken/quality_script_fastp_bracken.xml
       continue-on-error: true
@@ -56,7 +56,7 @@ jobs:
       run: |
         planemo test \
           --galaxy_python_version 3.10 \
-          --conda_install \
+          --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
           mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
       continue-on-error: true
@@ -65,7 +65,7 @@ jobs:
       run: |
         planemo test \
           --galaxy_python_version 3.10 \
-          --conda_install \
+          --conda_auto_install \
           --conda_ensure_channels conda-forge,bioconda,defaults \
           quast/quast_get_fasta.xml
       continue-on-error: true
