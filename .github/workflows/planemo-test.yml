@@ -1,0 +1,95 @@
+name: Planemo Tool Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install wheel setuptools
+        pip install click==8.1.0 pyyaml pathvalidate gxformat2
+        pip install bioblend galaxy-tool-util ephemeris
+        pip install planemo
+
+    - name: Verify installation
+      run: |
+        pip list | grep -E 'click|planemo|yaml|gxformat2|bioblend|ephemeris|pathvalidate'
+        planemo --version
+
+    - name: Verify directory structure
+      run: |
+        echo "Repository contents:"
+        ls -la
+        echo "Checking tool directories:"
+        [ -d fastp-bracken ] || { echo "fastp-bracken directory not found"; exit 1; }
+        [ -d mlst-amrfinder-staramr ] || { echo "mlst-amrfinder-staramr directory not found"; exit 1; }
+        [ -d quast ] || { echo "quast directory not found"; exit 1; }
+
+    - name: Test FastP-Bracken tool
+      run: |
+        planemo test \
+          --galaxy_python_version 3.10 \
+          --conda_dependency_resolution \
+          --conda_auto_install \
+          --conda_ensure_channels conda-forge,bioconda,defaults \
+          --summary compact \
+          --test_output_json fastp_bracken_output.json \
+          fastp-bracken/quality_script_fastp_bracken.xml
+      continue-on-error: true
+
+    - name: Test MLST-AMRFinder-StarAMR tool
+      run: |
+        planemo test \
+          --galaxy_python_version 3.10 \
+          --conda_dependency_resolution \
+          --conda_auto_install \
+          --conda_ensure_channels conda-forge,bioconda,defaults \
+          --summary compact \
+          --test_output_json mlst_amr_output.json \
+          mlst-amrfinder-staramr/mlst_amrfinder_staramr.xml
+      continue-on-error: true
+
+    - name: Test QUAST tool
+      run: |
+        planemo test \
+          --galaxy_python_version 3.10 \
+          --conda_dependency_resolution \
+          --conda_auto_install \
+          --conda_ensure_channels conda-forge,bioconda,defaults \
+          --summary compact \
+          --test_output_json quast_output.json \
+          quast/quast_get_fasta.xml
+      continue-on-error: true
+
+    - name: List output files
+      if: always()
+      run: |
+        echo "Current directory contents:"
+        ls -la
+        echo "Tool test output files:"
+        find . -name "*_output.html" -o -name "*_output.json"
+
+    - name: Upload test reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: planemo-test-reports
+        path: |
+          *_output.html
+          *_output.json
