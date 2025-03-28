@@ -41,15 +41,6 @@ jobs:
         [ -d mlst-amrfinder-staramr ] || { echo "mlst-amrfinder-staramr directory not found"; exit 1; }
         [ -d quast ] || { echo "quast directory not found"; exit 1; }
 
-    # Create the missing test input file for tools that expect it
-    - name: Create missing test input for MLST-AMRFinder-StarAMR
-      run: |
-        echo "{}" > mlst-amrfinder-staramr/input.json
-
-    - name: Create missing test input for QUAST
-      run: |
-        echo "{}" > quast/input.json
-
     - name: Test FastP-Bracken tool
       run: |
         planemo test \
